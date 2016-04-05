@@ -60,6 +60,23 @@ app.post('/todos', function(request, response) {
 
 });
 
+app.delete('/todos/:id', function(request, response) {
+
+var todoId = parseInt(request.params.id, 10); // req.param returns string we need to convert it to Int
+var matchedTodo = _.findWhere(todos, { id: todoId });
+
+if(matchedTodo){
+
+todos = _.without(todos,matchedTodo); 
+response.json(matchedTodo);
+
+}else{
+	response.status(404).send({"error":"no TOdo found with the given id"});
+}
+
+
+});
+
 app.listen(PORT, function() {
 
     console.log("Express running at " + PORT);
