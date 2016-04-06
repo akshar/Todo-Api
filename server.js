@@ -14,8 +14,15 @@ app.get('/', function(request, response) {
 
 //GET /todos
 app.get('/todos', function(request, response) {
+    var queryParams = request.query;
+    var filteredTodos = todos;
+    if (queryParams.completed == 'true' && queryParams.hasOwnProperty('completed')) {
+        filteredTodos = _.where(filteredTodos, { completed: true });
+    } else if (queryParams.completed = 'false' && queryParams.hasOwnProperty('completed')) {
+        filteredTodos = _.where(filteredTodos, { completed: false });
+    }
 
-    response.json(todos);
+    response.json(filteredTodos);
 
 });
 
@@ -78,17 +85,17 @@ app.delete('/todos/:id', function(request, response) {
 });
 
 app.put('/todos/:id', function(request, response) {
-    
+
     var todoId = parseInt(request.params.id, 10); // req.param returns string we need to convert it to Int
     var matchedTodo = _.findWhere(todos, { id: todoId });
 
-    if(!matchedTodo){
+    if (!matchedTodo) {
         return response.status(404).send();
     }
 
 
     var body = _.pick(request.body, 'description', 'completed');
-    var validAttributes={};
+    var validAttributes = {};
     if (body.hasOwnProperty('completed') && _.isBoolean(body.completed)) {
         validAttributes.completed = body.completed;
     } else if (body.hasOwnProperty('completed')) {
@@ -102,7 +109,7 @@ app.put('/todos/:id', function(request, response) {
         return response.status(400).send();
     }
 
-    matchedTodo = _.extend(matchedTodo,validAttributes); 
+    matchedTodo = _.extend(matchedTodo, validAttributes);
     response.json(matchedTodo);
 
 
