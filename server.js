@@ -40,7 +40,7 @@ app.get('/todos', function(request, response) {
 //GET /todos/:id
 app.get('/todos/:id', function(request, response) {
     var todoId = parseInt(request.params.id, 10); // req.param returns string we need to convert it to Int
-    var matchedTodo = _.findWhere(todos, { id: todoId });
+   // var matchedTodo = _.findWhere(todos, { id: todoId });
     // var matchedTodo;
     // todos.forEach(function(todo) {
     //     if (todoId === todo.id) {
@@ -49,11 +49,24 @@ app.get('/todos/:id', function(request, response) {
 
     // });
 
-    if (matchedTodo) {
-        response.json(matchedTodo);
-    } else {
+    // if (matchedTodo) {
+    //     response.json(matchedTodo);
+    // } else {
+    //     response.status(404).send();
+    // }
+
+    db.todo.findById(todoId).then(function(todo){
+        if(!!todo){
+        response.json(todo.toJSON());
+    }else{
         response.status(404).send();
     }
+    },function(e){
+        response.status(500).send();
+    });
+
+
+
 
 });
 
