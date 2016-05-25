@@ -108,7 +108,7 @@ app.put('/todos/:id', function(request, response) {
                 response.json(todo.toJSON());
             }, function(e) {
                 response.status(400).json(e);
-            }); 
+            });
         } else {
             response.status(404).send();
         }
@@ -119,7 +119,17 @@ app.put('/todos/:id', function(request, response) {
 
     // matchedTodo = _.extend(matchedTodo, attributes);
     // response.json(matchedTodo);
+});
 
+app.post('/users', function(request, response) {
+
+    var body = _.pick(request.body, 'email', 'password');
+    db.user.create(body).then(function(user) {
+        response.json(user.toJSON());
+
+    }, function(e) {
+        response.status(400).json(e);
+    })
 
 
 });
